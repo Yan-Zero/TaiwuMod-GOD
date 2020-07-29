@@ -1,0 +1,25 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.30011.22
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "God", "God\God.csproj", "{C64F94A3-43C7-45C3-B77C-D12C47025BD0}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{C64F94A3-43C7-45C3-B77C-D12C47025BD0}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C64F94A3-43C7-45C3-B77C-D12C47025BD0}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C64F94A3-43C7-45C3-B77C-D12C47025BD0}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C64F94A3-43C7-45C3-B77C-D12C47025BD0}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {51A824CA-6B2B-4FD8-9E1A-91A4CAF94CD3}
+	EndGlobalSection
+EndGlobal
