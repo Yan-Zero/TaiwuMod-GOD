@@ -106,7 +106,11 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="God.cs" />
+    <Compile Include="Core\God.cs" />
+    <Compile Include="Core\HarmonyPatches.cs" />
+    <Compile Include="Core\RuntimeConfig.cs" />
+    <Compile Include="Core\Setting.cs" />
+    <Compile Include="GameSpeeder.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
