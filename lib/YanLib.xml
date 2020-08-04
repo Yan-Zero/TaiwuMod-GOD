@@ -30,7 +30,18 @@
             <param name="placeId"></param>
             <returns></returns>
         </member>
-        <member name="M:YanLib.Core.RuntimeConfig.AllocateKey(System.String,System.Int32)">
+        <member name="M:YanLib.Core.HarmonyPatches.OnChoose_Update">
+            <summary>
+            选项的快捷键
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="F:YanLib.Core.RuntimeConfig.ChoiceCount">
+            <summary>
+            选择次数，用来限制每个时节的次数的
+            </summary>
+        </member>
+        <member name="M:YanLib.Core.RuntimeConfig.AllocateActorDataKey(System.String,System.Int32)">
             <summary>
             分配 Key 返回分配到的 Key。
             </summary>
@@ -224,12 +235,117 @@
             </summary>
             <param name="DataJson"></param>
         </member>
+        <member name="T:YanLib.DataManipulator.EventHelper">
+            <summary>
+            事件操作者
+            </summary>
+        </member>
+        <member name="M:YanLib.DataManipulator.EventHelper.LoadEventDataFromFile(System.String)">
+            <summary>
+            从文件中加载数据
+            </summary>
+            <param name="Path">文件目录</param>
+        </member>
+        <member name="M:YanLib.DataManipulator.EventHelper.LoadEventData(System.String)">
+            <summary>
+            加载事件数据
+            </summary>
+            <param name="data"></param>
+        </member>
+        <member name="M:YanLib.DataManipulator.EventHelper.AddEvent(YanLib.EventSystem.Event)">
+            <summary>
+            添加事件到系统中
+            </summary>
+            <param name="event">事件</param>
+        </member>
+        <member name="M:YanLib.DataManipulator.EventHelper.LoadAdditionalChoicesDataFromFile(System.String)">
+            <summary>
+            从文件中加载数据
+            </summary>
+            <param name="Path">文件目录</param>
+        </member>
+        <member name="M:YanLib.DataManipulator.EventHelper.LoadAdditionalChoicesData(System.String)">
+            <summary>
+            加载事件数据
+            </summary>
+            <param name="data"></param>
+        </member>
+        <member name="M:YanLib.DataManipulator.EventHelper.AddChoices(YanLib.EventSystem.AdditionalChoices)">
+            <summary>
+            给其追加按钮
+            </summary>
+            <param name="choices"></param>
+        </member>
+        <member name="M:YanLib.DataManipulator.EventHelper.GetEvent(System.String,System.Int32)">
+            <summary>
+            获取事件数据事件
+            </summary>
+            <param name="Namespace">事件所处的命名空间</param>
+            <param name="Key">事件的 Key</param>
+            <returns>事件数据</returns>
+        </member>
+        <member name="M:YanLib.DataManipulator.EventHelper.GetEvent(System.String)">
+            <summary>
+            获取事件数据事件
+            </summary>
+            <param name="EventID">事件 ID</param>
+            <returns>事件数据</returns>
+        </member>
+        <member name="M:YanLib.DataManipulator.EventHelper.CallEvent(System.String,System.Int32,System.Int32)">
+            <summary>
+            唤起事件
+            </summary>
+            <param name="Namespace">事件所处的命名空间</param>
+            <param name="Key">事件的 Key</param>
+            <param name="TargetActorID">对面的角色 ID</param>
+        </member>
+        <member name="M:YanLib.DataManipulator.EventHelper.CallEvent(System.String,System.Int32)">
+            <summary>
+            唤起事件
+            </summary>
+            <param name="EventID">事件 ID</param>
+            <param name="TargetActorID">对面的角色 ID</param>
+        </member>
+        <member name="M:YanLib.DataManipulator.EventHelper.GetEvent(System.Int32)">
+            <summary>
+            获取原版事件的数据
+            </summary>
+            <param name="GameEventID">原版事件ID</param>
+            <returns>事件数据</returns>
+        </member>
+        <member name="M:YanLib.DataManipulator.EventHelper.CallEvent(System.Int32,System.Int32,System.Int32)">
+            <summary>
+            原版事件，原版事件转原版事件并不会改动 MainEventData，请自己手动修改
+            </summary>
+            <param name="ID"></param>
+            <param name="TargetActorID"></param>
+            <param name="chooseId">只有转场的时候才用得到</param>
+        </member>
+        <member name="M:YanLib.DataManipulator.EventHelper.AnalyzeDesc(System.String,System.Int32,System.String)">
+            <summary>
+            解析文本中的描述
+            </summary>
+            <param name="ID">事件 ID</param>
+            <param name="TargetActorID">对方的 ID</param>
+            <param name="Desc">事件文本</param>
+            <returns></returns>
+        </member>
+        <member name="M:YanLib.DataManipulator.EventHelper.AnalyzeTip(System.String,YanLib.EventSystem.EventChoice,System.Int32,System.String)">
+            <summary>
+            解析 Tip
+            </summary>
+            <param name="ID">事件 ID</param>
+            <param name="Choice">选项</param>
+            <param name="TargetActorID">对方的 ID</param>
+            <param name="Tip"></param>
+            <returns></returns>
+        </member>
         <member name="T:YanLib.YanLib">
             <summary>
             Mod 入口
             </summary>
         </member>
-        <member name="F:YanLib.YanLib.version">
+        <member name="F:YanLib.YanLib.Version">
             <summary>版本</summary>
         </member>
         <member name="F:YanLib.YanLib.GUID">
@@ -240,6 +356,11 @@
         </member>
         <member name="F:YanLib.YanLib.settings">
             <summary>Yan Lib 的设置</summary>
+        </member>
+        <member name="F:YanLib.YanLib.DebugMode">
+            <summary>
+            Debug 模式
+            </summary>
         </member>
         <member name="F:YanLib.YanLib.ToggleUI">
             <summary>
@@ -344,6 +465,582 @@
             Transpiler
             </summary>
         </member>
+        <member name="T:YanLib.EventSystem.AdditionalChoices">
+            <summary>
+            追加按钮
+            </summary>
+        </member>
+        <member name="F:YanLib.EventSystem.AdditionalChoices.ID">
+            <summary>
+            对应 EventID
+            </summary>
+        </member>
+        <member name="F:YanLib.EventSystem.AdditionalChoices.Choices">
+            <summary>
+            选项
+            </summary>
+        </member>
+        <member name="F:YanLib.EventSystem.AdditionalChoices.Index">
+            <summary>
+            开始添加的地方
+            </summary>
+        </member>
+        <member name="T:YanLib.EventSystem.CallInfo">
+            <summary>
+            事件系统用来调用函数的
+            </summary>
+        </member>
+        <member name="T:YanLib.EventSystem.CallInfo.ParamInfo">
+            <summary>
+            参数信息
+            </summary>
+        </member>
+        <member name="T:YanLib.EventSystem.CallInfo.ParamInfo.ParamType">
+            <summary>
+            参数的类型
+            </summary>
+        </member>
+        <member name="F:YanLib.EventSystem.CallInfo.ParamInfo.ParamType.Int">
+            <summary>
+            整型
+            </summary>
+        </member>
+        <member name="F:YanLib.EventSystem.CallInfo.ParamInfo.ParamType.String">
+            <summary>
+            字符串
+            </summary>
+        </member>
+        <member name="F:YanLib.EventSystem.CallInfo.ParamInfo.ParamType.ActorID">
+            <summary>
+            对面的角色 ID
+            </summary>
+        </member>
+        <member name="F:YanLib.EventSystem.CallInfo.ParamInfo.ParamType.Location">
+            <summary>
+            当前位置
+            </summary>
+        </member>
+        <member name="F:YanLib.EventSystem.CallInfo.ParamInfo.ParamType.DescOrTip">
+            <summary>
+            事件/选项的描述文本
+            </summary>
+        </member>
+        <member name="F:YanLib.EventSystem.CallInfo.ParamInfo.ParamType.ChooseItem">
+            <summary>
+            （选项用）打开物品选择界面
+            值为 0 时候，获取太吾全部物品，否则为对方的
+            </summary>
+        </member>
+        <member name="F:YanLib.EventSystem.CallInfo.ParamInfo.ParamType.ChooseActor">
+            <summary>
+            （选项用）打开人物选择界面，获取太吾同道（不包括囚犯与孩子）
+            </summary>
+        </member>
+        <member name="F:YanLib.EventSystem.CallInfo.ParamInfo.ParamType.InputText">
+            <summary>
+            （选项用）输入的内容，string
+            </summary>
+        </member>
+        <member name="F:YanLib.EventSystem.CallInfo.ParamInfo.Type">
+            <summary>
+            类型
+            </summary>
+        </member>
+        <member name="F:YanLib.EventSystem.CallInfo.ParamInfo.Value">
+            <summary>
+            值
+            </summary>
+        </member>
+        <member name="F:YanLib.EventSystem.CallInfo.Target">
+            <summary>
+            目标函数，全名
+            </summary>
+        </member>
+        <member name="F:YanLib.EventSystem.CallInfo.TargetType">
+            <summary>
+            目标类，可以更准确地定位，需要填写 TargetMethod
+            </summary>
+        </member>
+        <member name="F:YanLib.EventSystem.CallInfo.TargetMethod">
+            <summary>
+            函数的名字，需要填写 TargetType
+            </summary>
+        </member>
+        <member name="F:YanLib.EventSystem.CallInfo.Params">
+            <summary>
+            需要传入的参数
+            </summary>
+        </member>
+        <member name="M:YanLib.EventSystem.CallInfo.GetMethod">
+            <summary>
+            获取函数信息
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:YanLib.EventSystem.CallInfo.Call(System.String,System.Int32,System.String)">
+            <summary>
+            调用函数
+            </summary>
+            <param name="EventID">事件 ID</param>
+            <param name="TargetActorID">目标角色</param>
+            <param name="DescOrTip">描述文本</param>
+            <returns></returns>
+        </member>
+        <member name="T:YanLib.EventSystem.Location">
+            <summary>
+            位置
+            </summary>
+        </member>
+        <member name="F:YanLib.EventSystem.Location.MapID">
+            <summary>
+            大地图的 ID
+            </summary>
+        </member>
+        <member name="F:YanLib.EventSystem.Location.TileID">
+            <summary>
+            地图中土块的 ID
+            </summary>
+        </member>
+        <member name="P:YanLib.EventSystem.Location.x">
+            <summary>
+            土块横坐标
+            </summary>
+        </member>
+        <member name="P:YanLib.EventSystem.Location.y">
+            <summary>
+            土块纵坐标
+            </summary>
+        </member>
+        <member name="M:YanLib.EventSystem.Location.#ctor(System.Int32[])">
+            <summary>
+            初始化
+            </summary>
+            <param name="places">位置信息</param>
+        </member>
+        <member name="T:YanLib.EventSystem.ChoiceEnd">
+            <summary>
+            选择后效果
+            </summary>
+        </member>
+        <member name="T:YanLib.EventSystem.ChoiceEnd.Effect">
+            <summary>
+            效果
+            </summary>
+        </member>
+        <member name="T:YanLib.EventSystem.ChoiceEnd.Effect.EffectTarget">
+            <summary>
+            类型
+            </summary>
+        </member>
+        <member name="F:YanLib.EventSystem.ChoiceEnd.Effect.EffectTarget.Time">
+            <summary>
+            时间,A值
+            </summary>
+        </member>
+        <member name="F:YanLib.EventSystem.ChoiceEnd.Effect.EffectTarget.Item">
+            <summary>
+            物品，A值为物品 ID，B值如果是0则角色为太吾，如果不是，则就是目标人物
+            </summary>
+        </member>
+        <member name="F:YanLib.EventSystem.ChoiceEnd.Effect.EffectTarget.MoveToAround">
+            <summary>
+            移动到周围，ValueA 为 0 时对象为太吾，如果不是则为对方
+            无视 Reduce
+            </summary>
+        </member>
+        <member name="F:YanLib.EventSystem.ChoiceEnd.Effect.EffectTarget.Favor">
+            <summary>
+            对方的好感
+            </summary>
+        </member>
+        <member name="F:YanLib.EventSystem.ChoiceEnd.Effect.EffectTarget.TaiwuResource">
+            <summary>
+            Taiwu的资源，A值为资源的类型，B值为数量
+            </summary>
+        </member>
+        <member name="F:YanLib.EventSystem.ChoiceEnd.Effect.EffectTarget.TargetResource">
+            <summary>
+            对方的资源
+            </summary>
+        </member>
+        <member name="F:YanLib.EventSystem.ChoiceEnd.Effect.Reduce">
+            <summary>
+            True 为减少,False 为增加
+            </summary>
+        </member>
+        <member name="F:YanLib.EventSystem.ChoiceEnd.Effect.ValueA">
+            <summary>
+            A值
+            </summary>
+        </member>
+        <member name="F:YanLib.EventSystem.ChoiceEnd.Effect.ValueB">
+            <summary>
+            B值
+            </summary>
+        </member>
+        <member name="F:YanLib.EventSystem.ChoiceEnd.Effect.Type">
+            <summary>
+            作用类型
+            </summary>
+        </member>
+        <member name="F:YanLib.EventSystem.ChoiceEnd.CallEnd">
+            <summary>
+            调用的函数
+            </summary>
+        </member>
+        <member name="F:YanLib.EventSystem.ChoiceEnd.Effects">
+            <summary>
+            效果
+            </summary>
+        </member>
+        <member name="F:YanLib.EventSystem.ChoiceEnd.ToID">
+            <summary>
+            唤起的事件，0为改变窗口，-1为自定义
+            </summary>
+        </member>
+        <member name="F:YanLib.EventSystem.ChoiceEnd.Filter">
+            <summary>
+            毫无疑问，是选择物品/人物用的，返回值需求为  IEnumerable&lt;int&gt;
+            </summary>
+        </member>
+        <member name="M:YanLib.EventSystem.ChoiceEnd.End(System.String,System.Int32)">
+            <summary>
+            结束
+            </summary>
+            <param name="EventID"></param>
+            <param name="TargetActorID"></param>
+        </member>
+        <member name="M:YanLib.EventSystem.ChoiceEnd.ActorMoveToAround(System.Int32)">
+            <summary>
+            移动到周围
+            </summary>
+            <param name="TargetActorID"></param>
+        </member>
+        <member name="T:YanLib.EventSystem.ChoiceRequirement">
+            <summary>
+            选项需求
+            </summary>
+        </member>
+        <member name="P:YanLib.EventSystem.ChoiceRequirement.HasCountPerMonth">
+            <summary>
+            是否有每月次数限制
+            </summary>
+        </member>
+        <member name="F:YanLib.EventSystem.ChoiceRequirement.RequirementCall">
+            <summary>
+            返回是否符合需求的函数，返回值 IEnumerable&lt;KeyValuePair&lt;bool, string&gt;&gt;
+            </summary>
+        </member>
+        <member name="T:YanLib.EventSystem.ChoiceRequirement.Requirement">
+            <summary>
+            需求
+            </summary>
+        </member>
+        <member name="T:YanLib.EventSystem.ChoiceRequirement.Requirement.RequirementTarget">
+            <summary>
+            类型
+            </summary>
+        </member>
+        <member name="F:YanLib.EventSystem.ChoiceRequirement.Requirement.RequirementTarget.Time">
+            <summary>
+            时间
+            </summary>
+        </member>
+        <member name="F:YanLib.EventSystem.ChoiceRequirement.Requirement.RequirementTarget.Item">
+            <summary>
+            物品，A值为物品 ID，B值如果是0则角色为太吾，如果不是，则就是目标人物
+            </summary>
+        </member>
+        <member name="F:YanLib.EventSystem.ChoiceRequirement.Requirement.RequirementTarget.Teammate">
+            <summary>
+            同道，0 为 不是同道，1 为 是同道
+            </summary>
+        </member>
+        <member name="F:YanLib.EventSystem.ChoiceRequirement.Requirement.RequirementTarget.Favor">
+            <summary>
+            好感度，ValueA 为需求的好感等级 ValueB 为 0 时，大于等于，为 1 时，小于等于
+            </summary>
+        </member>
+        <member name="F:YanLib.EventSystem.ChoiceRequirement.Requirement.RequirementTarget.CountPerMonth">
+            <summary>
+            每个时节的次数
+            </summary>
+        </member>
+        <member name="F:YanLib.EventSystem.ChoiceRequirement.Requirement.RequirementTarget.TaiwuResource">
+            <summary>
+            Taiwu的资源，A值为资源的类型，B值为数量
+            </summary>
+        </member>
+        <member name="F:YanLib.EventSystem.ChoiceRequirement.Requirement.RequirementTarget.TargetResource">
+            <summary>
+            对方的资源
+            </summary>
+        </member>
+        <member name="F:YanLib.EventSystem.ChoiceRequirement.Requirement.RequirementTarget.BasePartValue">
+            <summary>
+            地区恩义，ValueA为数值，B值为0时，为大于等于，否则为小于等于
+            </summary>
+        </member>
+        <member name="F:YanLib.EventSystem.ChoiceRequirement.Requirement.RequirementTarget.NotOverTeammateMaxValue">
+            <summary>
+            没有超过同道最大成员数
+            </summary>
+        </member>
+        <member name="F:YanLib.EventSystem.ChoiceRequirement.Requirement.ValueA">
+            <summary>
+            A值
+            </summary>
+        </member>
+        <member name="F:YanLib.EventSystem.ChoiceRequirement.Requirement.ValueB">
+            <summary>
+            B值
+            </summary>
+        </member>
+        <member name="F:YanLib.EventSystem.ChoiceRequirement.Requirement.Type">
+            <summary>
+            需求类型
+            </summary>
+        </member>
+        <member name="F:YanLib.EventSystem.ChoiceRequirement.Requirements">
+            <summary>
+            需求
+            </summary>
+        </member>
+        <member name="M:YanLib.EventSystem.ChoiceRequirement.Allow(System.String,System.Int32)">
+            <summary>
+            获取是否符合条件
+            </summary>
+            <param name="EventID"></param>
+            <param name="TargetActorID"></param>
+            <returns></returns>
+        </member>
+        <member name="M:YanLib.EventSystem.ChoiceRequirement.GetRequirement(System.String,System.Int32)">
+            <summary>
+            获取未满足的需求
+            </summary>
+            <param name="EventID"></param>
+            <param name="TargetActorID"></param>
+            <returns></returns>
+        </member>
+        <member name="T:YanLib.EventSystem.Event">
+            <summary>
+            事件
+            </summary>
+        </member>
+        <member name="F:YanLib.EventSystem.Event.ID">
+            <summary>
+            包含命名空间的ID
+            </summary>
+        </member>
+        <member name="F:YanLib.EventSystem.Event.Desc">
+            <summary>
+            事件显示的文本，没有自动解析
+            </summary>
+        </member>
+        <member name="F:YanLib.EventSystem.Event.DynamicDesc">
+            <summary>
+            动态修改显示
+            </summary>
+        </member>
+        <member name="F:YanLib.EventSystem.Event.BackgroundID">
+            <summary>
+            背景 ID
+            </summary>
+        </member>
+        <member name="F:YanLib.EventSystem.Event.Choices">
+            <summary>
+            事件的选项
+            </summary>
+        </member>
+        <member name="F:YanLib.EventSystem.Event.DynamicChoices">
+            <summary>
+            动态选项，返回值为 List&lt;EventChoice&gt;
+            </summary>
+        </member>
+        <member name="F:YanLib.EventSystem.Event.InputFieldInfo">
+            <summary>
+            输入框信息
+            </summary>
+        </member>
+        <member name="F:YanLib.EventSystem.Event.DynamicInputFieldInfo">
+            <summary>
+            动态的，如果有就不访问 InputFieldInfo
+            </summary>
+        </member>
+        <member name="M:YanLib.EventSystem.Event.ShowUI(System.Int32)">
+            <summary>
+            显示事件
+            </summary>
+        </member>
+        <member name="M:YanLib.EventSystem.Event.CallEvent(System.Int32)">
+            <summary>
+            唤起事件
+            </summary>
+            <param name="TargetActorID">目标人物 ID</param>
+        </member>
+        <member name="M:YanLib.EventSystem.Event.GetDesc(System.Int32)">
+            <summary>
+            获取到解析后的事件描述
+            </summary>
+            <param name="TargetActorID">目标角色 ID</param>
+            <returns>事件描述</returns>
+        </member>
+        <member name="T:YanLib.EventSystem.EventChoice">
+            <summary>
+            事件的选项
+            </summary>
+        </member>
+        <member name="F:YanLib.EventSystem.EventChoice.Desc">
+            <summary>
+            Desc 原文本
+            </summary>
+        </member>
+        <member name="F:YanLib.EventSystem.EventChoice.DynamicDesc">
+            <summary>
+            动态修改显示
+            </summary>
+        </member>
+        <member name="F:YanLib.EventSystem.EventChoice.Tip">
+            <summary>
+            选项显示的 Tip
+            </summary>
+        </member>
+        <member name="F:YanLib.EventSystem.EventChoice.DynamicTip">
+            <summary>
+            动态修改显示 Tip
+            </summary>
+        </member>
+        <member name="F:YanLib.EventSystem.EventChoice.Effect">
+            <summary>
+            选择效果
+            </summary>
+        </member>
+        <member name="F:YanLib.EventSystem.EventChoice.ShowRequirement">
+            <summary>
+            显示的需求
+            </summary>
+        </member>
+        <member name="F:YanLib.EventSystem.EventChoice.CanChooseRequirement">
+            <summary>
+            可以点击的需求
+            </summary>
+        </member>
+        <member name="F:YanLib.EventSystem.EventChoice.ProfileStyle">
+            <summary>
+            选项头像风格 -99 为无，-1为太吾，0为对方
+            </summary>
+        </member>
+        <member name="M:YanLib.EventSystem.EventChoice.Choose(System.String,System.Int32)">
+            <summary>
+            选中该选项
+            </summary>
+        </member>
+        <member name="M:YanLib.EventSystem.EventChoice.GetDesc(System.String,System.Int32)">
+            <summary>
+            获取解析后的文本
+            </summary>
+            <returns>描述</returns>
+        </member>
+        <member name="M:YanLib.EventSystem.EventChoice.GetTip(System.String,System.Int32)">
+            <summary>
+            获取到解析后的 Tip
+            </summary>
+            <param name="EventID"></param>
+            <param name="TargetActorID"></param>
+            <returns></returns>
+        </member>
+        <member name="M:YanLib.EventSystem.EventChoice.DrawChoice(System.Int32,System.String)">
+            <summary>
+            在选项区绘制按钮，请于 SetMessageWindow 中使用（SetMassageWindow）
+            </summary>
+            <param name="TargetActorID"></param>
+            <param name="ChoiceID"></param>
+        </member>
+        <member name="T:YanLib.EventSystem.InputFieldInfo">
+            <summary>
+            输入框
+            </summary>
+        </member>
+        <member name="F:YanLib.EventSystem.InputFieldInfo.UseInputField">
+            <summary>
+            使用输入框
+            </summary>
+        </member>
+        <member name="F:YanLib.EventSystem.InputFieldInfo.MaxValue">
+            <summary>
+            最大值
+            </summary>
+        </member>
+        <member name="F:YanLib.EventSystem.InputFieldInfo.MinValue">
+            <summary>
+            最小值
+            </summary>
+        </member>
+        <member name="F:YanLib.EventSystem.InputFieldInfo.InputType">
+            <summary>
+            Input Type
+            </summary>
+        </member>
+        <member name="F:YanLib.EventSystem.InputFieldInfo.CharacterValidation">
+            <summary>
+            合法字符
+            </summary>
+        </member>
+        <member name="F:YanLib.EventSystem.InputFieldInfo.ContentType">
+            <summary>
+            内容类型
+            </summary>
+        </member>
+        <member name="F:YanLib.EventSystem.InputFieldInfo.ChoiceIndex">
+            <summary>
+            第几个按钮是输入的
+            </summary>
+        </member>
+        <member name="T:YanLib.EventSystem.YanPointerEnter">
+            <summary>
+            毫无疑问，是我自用的 PE
+            </summary>
+        </member>
+        <member name="F:YanLib.EventSystem.YanPointerEnter.TipTitle">
+            <summary>
+            Tip 标题
+            </summary>
+        </member>
+        <member name="F:YanLib.EventSystem.YanPointerEnter.TipContent">
+            <summary>
+            Tip 内容
+            </summary>
+        </member>
+        <member name="T:YanLib.YanException.InvalidEventIDException">
+            <summary>
+            事件ID错误
+            </summary>
+        </member>
+        <member name="M:YanLib.YanException.InvalidEventIDException.#ctor">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="M:YanLib.YanException.InvalidEventIDException.#ctor(System.String)">
+            <summary>
+            
+            </summary>
+            <param name="message"></param>
+        </member>
+        <member name="M:YanLib.YanException.InvalidEventIDException.#ctor(System.String,System.Exception)">
+            <summary>
+            
+            </summary>
+            <param name="message"></param>
+            <param name="innerException"></param>
+        </member>
+        <member name="M:YanLib.YanException.InvalidEventIDException.#ctor(System.Runtime.Serialization.SerializationInfo,System.Runtime.Serialization.StreamingContext)">
+            <summary>
+            
+            </summary>
+            <param name="info"></param>
+            <param name="context"></param>
+        </member>
         <member name="T:YanLib.ModHelper.ModHelper">
             <summary>
             用来方便 Mod 工作的
@@ -374,6 +1071,12 @@
             加载存档时调用
             </summary>
         </member>
+        <member name="F:YanLib.ModHelper.ModHelper.ChangeTrun">
+            <summary>
+            过月时候调用，不建议用这个（
+            否则过月速度会被拖慢（
+            </summary>
+        </member>
         <member name="P:YanLib.ModHelper.ModHelper.SettingUI">
             <summary>
             Mod 的设置
@@ -388,7 +1091,7 @@
         </member>
         <member name="M:YanLib.ModHelper.ModHelper.GetActorDataKey(System.Int32)">
             <summary>
-            返回一个专属的 Key 用以储存信息
+            返回一个专属 ActorData 的 Key 用以储存信息
             </summary>
             <param name="Key">Mod 内部使用的 Key 值，例如 1 2 3</param>
             <returns></returns>

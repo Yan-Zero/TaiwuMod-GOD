@@ -67,5 +67,46 @@
             应用修正
             </summary>
         </member>
+        <member name="T:TaiwuUIKit.GameObjects.TaiwuToggle">
+            <summary>
+            太吾标准风格的 Toggle
+            </summary>
+        </member>
+        <member name="P:TaiwuUIKit.GameObjects.TaiwuToggle.TipTitle">
+            <summary>
+            Tip 的标题
+            </summary>
+        </member>
+        <member name="P:TaiwuUIKit.GameObjects.TaiwuToggle.TipContant">
+            <summary>
+            Tip 的 内容
+            </summary>
+        </member>
+        <member name="P:TaiwuUIKit.GameObjects.TaiwuToggle.Label">
+            <summary>
+            文本表情（实际上是 BaseText 类型的）
+            </summary>
+        </member>
+        <member name="P:TaiwuUIKit.GameObjects.TaiwuToggle.UseBoldFont">
+            <summary>
+            使用粗体
+            </summary>
+        </member>
+        <member name="P:TaiwuUIKit.GameObjects.TaiwuToggle.UseOutline">
+            <summary>
+            使用 OutLine
+            </summary>
+        </member>
+        <member name="M:TaiwuUIKit.GameObjects.TaiwuToggle.#ctor">
+            <summary>
+            初始化
+            </summary>
+        </member>
+        <member name="M:TaiwuUIKit.GameObjects.TaiwuToggle.Create(System.Boolean)">
+            <summary>
+            创建组件
+            </summary>
+            <param name="active"></param>
+        </member>
     </members>
 </doc>

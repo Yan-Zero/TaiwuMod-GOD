@@ -7,6 +7,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 using TaiwuUIKit.GameObjects;
 using UnityEngine;
@@ -26,7 +27,7 @@ namespace God.Core
     public class God : BaseUnityPlugin
     {
         /// <summary>版本</summary>
-        public const string Version = "1.0.0.0";
+        public const string Version = "1.1.1.0";
         /// <summary>GUID</summary>
         public const string GUID = "Yan.God";
         /// <summary>日志</summary>
@@ -40,7 +41,11 @@ namespace God.Core
             Logger = base.Logger;
             Setting = new Setting();
             Setting.Init(Config);
-            HarmonyPatches.Init();
+
+            Thread athread = new Thread(new ThreadStart(HarmonyPatches.Init));
+            athread.IsBackground = true;
+            athread.Start();
+
             GameSpeeder.Load();
             Mod = new ModHelper(GUID, "GOD");
             Mod.SettingUI = new BoxAutoSizeModelGameObject()
@@ -51,7 +56,7 @@ namespace God.Core
                     Direction = UnityUIKit.Core.Direction.Vertical,
                     Spacing = 5,
                 },
-                SizeFitter=
+                SizeFitter =
                 {
                     VerticalFit = UnityEngine.UI.ContentSizeFitter.FitMode.PreferredSize
                 },
@@ -61,7 +66,7 @@ namespace God.Core
                     {
                         Name = "DelActor",
                         Element = { PreferredSize = { 0,60 }, },
-                        Group = 
+                        Group =
                         {
                             Direction = UnityUIKit.Core.Direction.Horizontal,
                             Spacing = 3,
@@ -231,7 +236,8 @@ namespace God.Core
                                                     Setting.speedScale.Value = value;
                                                 }
                                             }
-                                        }
+                                        },
+                                        DefaultActive = false,
                                     }
                                 },
                                 DefaultActive = false,
@@ -379,11 +385,165 @@ namespace God.Core
                                                     },
                                                 }
                                             }
-                                        }
+                                        },
+                                        DefaultActive = false,
                                     }
                                 },
                                 DefaultActive = false
                             },
+                        }
+                    },
+                    new BoxAutoSizeModelGameObject()
+                    {
+                        Name = "人物生育",
+                        Group =
+                        {
+                            Direction = UnityUIKit.Core.Direction.Vertical,
+                            Spacing = 5
+                        },
+                        SizeFitter = { VerticalFit = UnityEngine.UI.ContentSizeFitter.FitMode.PreferredSize },
+                        Children =
+                        {
+                            new TaiwuButton()
+                            {
+                                Name = "Button-Show",
+                                Text = "人物生育",
+                                UseBoldFont = true,
+                                UseOutline = true,
+                                FontColor = Color.white,
+                                OnClick = (Button button) =>
+                                {
+                                    for(int i = 1;i<button.Parent.Children.Count;i++)
+                                    {
+                                        button.Parent.Children[i].SetActive(!button.Parent.Children[i].IsActive);
+                                    }
+                                },
+                                Element =
+                                {
+                                    PreferredSize = { 0 , 50 }
+                                }
+                            },
+                            new Container()
+                            {
+                                Name = "生育控制",
+                                Group =
+                                {
+                                    Direction = UnityUIKit.Core.Direction.Horizontal,
+                                    Spacing = 5,
+                                },
+                                Element =
+                                {
+                                    PreferredSize = { 0 , 50 }
+                                },
+                                Children =
+                                {
+                                    new TaiwuLabel()
+                                    {
+                                        Text = "不会怀蛐蛐",
+                                        Element = { PreferredSize = { 200 , 0 }},
+                                    },
+                                    new TaiwuToggle()
+                                    {
+                                        Name = "怀蛐蛐的开关",
+                                        isOn = Setting.ChildIsntQuqu.Value,
+                                        Text = Setting.ChildIsntQuqu.Value ? "开" : "关",
+                                        onValueChanged = (bool value,Toggle toggle) =>
+                                        {
+                                            toggle.Text = Setting.ChildIsntQuqu.Value ? "开" : "关";
+                                            Setting.ChildIsntQuqu.Value = value;
+                                            if(value)
+                                                HarmonyPatches.PatchHandler["莫得蛐蛐"].Patch(HarmonyPatches.harmony);
+                                            else
+                                                HarmonyPatches.PatchHandler["莫得蛐蛐"].Unpatch(HarmonyPatches.harmony);
+                                        },
+                                        Element = { PreferredSize = { 50 , 50 } }
+                                    },
+                                    new TaiwuLabel()
+                                    {
+                                        Text = "同性生娃",
+                                        Element = { PreferredSize = { 200 , 0 }},
+                                    },
+                                    new TaiwuToggle()
+                                    {
+                                        Name = "同性生娃的开关",
+                                        isOn = Setting.ConceiveIgnoreSex.Value,
+                                        Text = Setting.ConceiveIgnoreSex.Value ? "开" : "关",
+                                        onValueChanged = (bool value,Toggle toggle) =>
+                                        {
+                                            toggle.Text = Setting.ConceiveIgnoreSex.Value ? "开" : "关";
+                                            Setting.ConceiveIgnoreSex.Value = value;
+                                        },
+                                        Element = { PreferredSize = { 50 , 50 } },
+                                        TipTitle = "同性生子",
+                                        TipContant = "对太吾和 NPC 都有效"
+                                    },
+                                    new TaiwuLabel()
+                                    {
+                                        Text = "最大子嗣数量",
+                                        Element = { PreferredSize = { 150 , 0 }},
+                                    },
+                                    new TaiwuToggle()
+                                    {
+                                        Name = "最大子嗣数量的开关",
+                                        isOn = Setting.ChildrenMaxCountChange.Value,
+                                        Text = Setting.ChildrenMaxCountChange.Value ? "开" : "关",
+                                        onValueChanged = (bool value,Toggle toggle) =>
+                                        {
+                                            toggle.Text = Setting.ChildrenMaxCountChange.Value ? "开" : "关";
+                                            Setting.ChildrenMaxCountChange.Value = value;
+                                            if(value)
+                                                HarmonyPatches.PatchHandler["最大孩子数修改"].Patch(HarmonyPatches.harmony);
+                                            else
+                                                HarmonyPatches.PatchHandler["最大孩子数修改"].Unpatch(HarmonyPatches.harmony);
+                                            (toggle.Parent.Children.Last() as TaiwuInputField).ReadOnly = !value;
+                                        },
+                                        Element = { PreferredSize = { 50 , 50 }},
+                                        TipTitle = "子嗣数量修改（太污是他们的 2.5 倍）",
+                                        TipContant = "举个例子，当一对夫妻没有再婚，那么他们原本最多只会有一个子嗣，而太污是他们的 2.5 倍。修改后，他们最多的子嗣数量变为指定值。",
+                                    },
+                                    new TaiwuInputField()
+                                    {
+                                        ContentType = UnityEngine.UI.InputField.ContentType.IntegerNumber,
+                                        InputType = UnityEngine.UI.InputField.InputType.AutoCorrect,
+                                        Text = Setting.ChildrenMaxCount.Value.ToString(),
+                                        OnEndEdit = (string value,InputField IF) =>
+                                        {
+                                            Setting.ChildrenMaxCount.Value = value.ParseInt();
+                                        }
+                                    }
+                                },
+                                DefaultActive = false,
+                            },
+                            new Container()
+                            {
+                                Name = "无中生有限制",
+                                Group =
+                                {
+                                    Direction = UnityUIKit.Core.Direction.Horizontal,
+                                    Spacing = 5,
+                                },
+                                Element =
+                                {
+                                    PreferredSize = { 0 , 50 }
+                                },
+                                Children =
+                                {
+                                    new TaiwuLabel()
+                                    {
+                                        Text = "没有无中生有的 Level 9",
+                                        //Element = { PreferredSize = { 200 , 0 } }
+                                    },
+                                    new TaiwuToggle()
+                                    {
+                                        Name = "没有无中生有的 Level 9的开关",
+                                        isOn = Setting.DontMakeLevel_9.Value,
+                                        Text = Setting.DontMakeLevel_9.Value ? "开" : "关",
+                                        onValueChanged = (bool value,Toggle toggle) => Setting.DontMakeLevel_9.Value = value,
+                                        Element = { PreferredSize = { 50 , 50 } }
+                                    },
+                                },
+                                DefaultActive = false,
+                            }
                         }
                     }
                 }

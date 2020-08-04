@@ -97,17 +97,17 @@ namespace God
             private static void Prefix(ref float autoTime)
             {
                 // 变速配置激活状态且倍速>1才改这个等待时间
-                if (God.Core.God.Setting.enabled.Value && God.Core.God.Setting.speedScale.Value > 1)
-                    autoTime /= God.Core.God.Setting.speedScale.Value;
+                if (Core.God.Setting.enabled.Value && God.Core.God.Setting.speedScale.Value > 1)
+                    autoTime /= Core.God.Setting.speedScale.Value;
             }
         }
 
         [HarmonyPatch(typeof(ReadBook), "SetReadBookWindow")]
         public static class StartReadBook
         {
-            private static void Postfix() 
+            private static void Prefix() 
             {
-                if (God.Core.God.Setting.stopOnReading.Value)
+                if (Core.God.Setting.stopOnReading.Value)
                     GameSpeeder.ApplyTimeScale(false);
             }
         }
@@ -115,7 +115,7 @@ namespace God
         [HarmonyPatch(typeof(ReadBook), "CloseReadBookWindow")]
         public static class EndReadBook
         {
-            private static void Postfix() => GameSpeeder.ApplyTimeScale(God.Core.God.Setting.enabled.Value);
+            private static void Postfix() => GameSpeeder.ApplyTimeScale(Core.God.Setting.enabled.Value);
         }
 
         [HarmonyPatch(typeof(GetQuquWindow), "ShowGetQuquWindow")]

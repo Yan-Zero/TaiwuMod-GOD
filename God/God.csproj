@@ -106,6 +106,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Core\Class1.cs" />
     <Compile Include="Core\God.cs" />
     <Compile Include="Core\HarmonyPatches.cs" />
     <Compile Include="Core\RuntimeConfig.cs" />
